@@ -22,4 +22,11 @@ public class HelloController {
 		model.addAttribute("username", "흐흠 최은주");
 		return "hellojsp";
 	}
+
+
+	@GetMapping("/")
+	public String getBegnpoint() {
+		return "index";
+	}
+	
 }

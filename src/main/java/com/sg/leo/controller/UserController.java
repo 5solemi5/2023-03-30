@@ -1,7 +1,14 @@
 package com.sg.leo.controller;
+import java.util.List;
 import java.util.function.Supplier;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -47,5 +54,29 @@ public class UserController {
 		userRepository.save(findUser);
 		return "회원수정성공했음";
 	}
+	
+	@DeleteMapping("/user/{id}")
+	public @ResponseBody String deleteUser(@PathVariable int id) {
+		userRepository.deleteById(id);
+		return id + "번 회원 삭제 성공";
+	}
+	
+	@GetMapping("/user/list")
+	public @ResponseBody List<User> getUserList(){
+		return userRepository.findAll();
+	}
+	
+	@GetMapping("/user/page/{page}")
+	public @ResponseBody Page <User> getUserListPaging(@PathVariable int page) {
+		Pageable pageable = 
+				PageRequest.of(page, 2, Sort.Direction.DESC, "id", "username");
+		return userRepository.findAll(pageable);
+	}
 
-}
+	@GetMapping("/user/page")
+	public @ResponseBody Page<User> getUserListPaging(@PageableDefault(
+			page=0, size=3, direction=Sort.Direction.DESC, sort= {"id", "username"}) 
+			Pageable pageable){
+		return userRepository.findAll(pageable);
+	}
+	}
