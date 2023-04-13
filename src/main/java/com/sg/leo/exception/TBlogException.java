@@ -7,3 +7,5 @@ public class TBlogException extends RuntimeException{
 		super(message);
 	}
 }
+	
+
